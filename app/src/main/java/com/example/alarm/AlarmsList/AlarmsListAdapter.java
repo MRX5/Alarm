@@ -71,7 +71,6 @@ public class AlarmsListAdapter extends RecyclerView.Adapter<AlarmsListAdapter.vi
             format=itemView.findViewById(R.id.list_item_format);
             itemView.setOnClickListener(this);
             switchButton.setOnCheckedChangeListener(this);
-
         }
 
         @Override

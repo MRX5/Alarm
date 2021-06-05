@@ -8,6 +8,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -20,6 +21,7 @@ public class AlarmService extends Service {
     public static String ALARM_ID="ALARM_ID";
     public static String TITLE="TITLE";
     private int alarmID;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         alarmID=intent.getIntExtra(ALARM_ID,0);
@@ -38,14 +40,16 @@ public class AlarmService extends Service {
     {
         if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "my_channel", NotificationManager.IMPORTANCE_HIGH);
-            channel.setDescription("My description");
+            channel.setDescription("description");
             NotificationManager manager=getSystemService(NotificationManager.class);
             manager.createNotificationChannel(channel);
         }
+
         Intent intent=new Intent(this, AlarmBroadcastReceiver.class);
         intent.setAction("CANCEL");
         intent.putExtra(ALARM_ID,alarmID);
         PendingIntent cancelPendingIntent=PendingIntent.getBroadcast(this,alarmID,intent,PendingIntent.FLAG_UPDATE_CURRENT);
+
         NotificationCompat.Builder builder=new NotificationCompat.Builder(this,CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_baseline_access_alarms_24)
                 .setContentTitle("Alarm")
@@ -54,5 +58,10 @@ public class AlarmService extends Service {
                 .addAction(R.drawable.ic_baseline_access_alarms_24,"Cancel",cancelPendingIntent)
                 .setPriority(NotificationCompat.PRIORITY_HIGH);
         return builder.build();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

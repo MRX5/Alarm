@@ -32,7 +32,7 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
             int alarmID=intent.getIntExtra(ALARM_ID,0);
             Intent stopIntent=new Intent(context, StopAlarmService.class);
             stopIntent.putExtra(AlarmService.ALARM_ID,alarmID);
-            context.startService(stopIntent);
+            StopAlarmService.enqueueWork(context,stopIntent);
         }
         else {
             Intent intentService = new Intent(context, AlarmService.class);

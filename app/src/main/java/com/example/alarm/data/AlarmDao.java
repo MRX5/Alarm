@@ -28,6 +28,9 @@ public interface AlarmDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     Completable updateAlarm(Alarm alarm);
 
+    @Query("update alarms set active=:state where alarmId=:id")
+    Completable updateAlarmState(int id,boolean state);
+
     @Delete
     Completable deleteAlarm(Alarm alarm);
 

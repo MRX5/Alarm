@@ -20,7 +20,7 @@ public class MainActivity extends AppCompatActivity implements AlarmsListAdapter
     RecyclerView recyclerView;
     AlarmsListAdapter adapter;
     AlarmListViewModel viewModel;
-    private final String TAG="aaa";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,11 +71,9 @@ public class MainActivity extends AppCompatActivity implements AlarmsListAdapter
         if(alarm.isActive())
         {
             alarm.Schedule(this);
-           // Log.d("aaa", "schedule");
         }
         else
         {
-            //Log.d("aaa", "cancel ");
             alarm.cancelAlarm(this);
 
         }

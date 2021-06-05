@@ -207,6 +207,7 @@ public class Alarm {
     }
 
     public void Schedule(Context context) {
+        Log.d("aa", "Schedule: ");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
         intent.putExtra(AlarmBroadcastReceiver.ALARM_ID,alarmId);

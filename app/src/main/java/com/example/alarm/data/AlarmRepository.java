@@ -2,11 +2,16 @@ package com.example.alarm.data;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import com.example.alarm.Service.AlarmService;
+import com.example.alarm.Service.StopAlarmService;
 
 import java.util.List;
 
@@ -67,6 +72,28 @@ public class AlarmRepository {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(()-> Log.d("aa", "updateAlarm "),e-> Log.d("aaa",  e.toString()));
     }
+    public void updateAlarmState(int id,boolean state)
+    {
+        db.alarmDao().updateAlarmState(id,state)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new CompletableObserver() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+                    @Override
+                    public void onComplete() {
+                        Log.d("aaa", "onComplete: ");
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
+    }
+
     @SuppressLint("CheckResult")
     public void deleteAlarm(Alarm alarm)
     {
@@ -84,4 +111,5 @@ public class AlarmRepository {
                 .subscribe(alarm1 -> alarm.setValue(alarm1));
         return alarm;
     }
+
 }
