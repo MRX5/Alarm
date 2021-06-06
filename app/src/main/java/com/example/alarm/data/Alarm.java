@@ -13,7 +13,9 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.example.alarm.Broadcast.AlarmBroadcastReceiver;
+
 import java.util.Calendar;
+
 @Entity(tableName = "alarms")
 public class Alarm {
     @PrimaryKey(autoGenerate = true)
@@ -21,19 +23,19 @@ public class Alarm {
     private String title;
     private int hour, minute;
     private boolean repeat;
-    @ColumnInfo(name = "active",defaultValue = "true")
+    @ColumnInfo(name = "active", defaultValue = "true")
     private boolean active;
     private long createTime;
     private boolean saturday, sunday, monday, tuesday, wednesday, thursday, friday;
 
 
-    public Alarm(int alarmId, String title, int hour, int minute, long createTime,boolean active, boolean repeat, boolean saturday, boolean sunday, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday) {
+    public Alarm(int alarmId, String title, int hour, int minute, long createTime, boolean active, boolean repeat, boolean saturday, boolean sunday, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday) {
         this.alarmId = alarmId;
         this.title = title;
         this.hour = hour;
         this.minute = minute;
-        this.createTime=createTime;
-        this.active=active;
+        this.createTime = createTime;
+        this.active = active;
         this.repeat = repeat;
         this.saturday = saturday;
         this.sunday = sunday;
@@ -43,24 +45,6 @@ public class Alarm {
         this.thursday = thursday;
         this.friday = friday;
     }
-
-
-/*    @Ignore
-    public Alarm(String title, int hour, int minute, long createTime,boolean active, boolean repeat, boolean saturday, boolean sunday, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday) {
-        this.title = title;
-        this.hour = hour;
-        this.minute = minute;
-        this.createTime=createTime;
-        this.active=active;
-        this.repeat = repeat;
-        this.saturday = saturday;
-        this.sunday = sunday;
-        this.monday = monday;
-        this.tuesday = tuesday;
-        this.wednesday = wednesday;
-        this.thursday = thursday;
-        this.friday = friday;
-    }*/
 
     public int getAlarmId() {
         return alarmId;
@@ -207,10 +191,9 @@ public class Alarm {
     }
 
     public void Schedule(Context context) {
-        Log.d("aa", "Schedule: ");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(context, AlarmBroadcastReceiver.class);
-        intent.putExtra(AlarmBroadcastReceiver.ALARM_ID,alarmId);
+        intent.putExtra(AlarmBroadcastReceiver.ALARM_ID, alarmId);
         intent.putExtra(AlarmBroadcastReceiver.SATURDAY, saturday);
         intent.putExtra(AlarmBroadcastReceiver.SUNDAY, sunday);
         intent.putExtra(AlarmBroadcastReceiver.MONDAY, monday);
@@ -219,7 +202,7 @@ public class Alarm {
         intent.putExtra(AlarmBroadcastReceiver.THURSDAY, thursday);
         intent.putExtra(AlarmBroadcastReceiver.FRIDAY, friday);
         intent.putExtra(AlarmBroadcastReceiver.REPEAT, repeat);
-        intent.putExtra(AlarmBroadcastReceiver.TITLE,title);
+        intent.putExtra(AlarmBroadcastReceiver.TITLE, title);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -227,14 +210,23 @@ public class Alarm {
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
-        String v=""+calendar.getTimeInMillis();
 
         if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
         }
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        if (repeat) {
+            final long RUN_DAILY = 24 * 60 * 60 * 1000;
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    RUN_DAILY,
+                    pendingIntent);
+        } else {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
     }
 
     public void cancelAlarm(Context context) {

@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +22,7 @@ import com.example.alarm.R;
 import com.example.alarm.data.Alarm;
 import com.example.alarm.data.AlarmRepository;
 import com.example.alarm.databinding.ActivityEditAlarmBinding;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.timepicker.MaterialTimePicker;
 
 import java.util.Random;
@@ -32,14 +35,19 @@ public class CreateAlarmActivity extends AppCompatActivity {
     public static String ADD_STATE="add";
     public static String EDIT_STATE="edit";
     private int default_id=-1;
+    private MaterialToolbar toolbar;
     private int alarmId;
     private CreateAlarmViewModel viewModel;
     private CreateAlarmViewModelFactory factory;
+
     private long createdTime=System.currentTimeMillis();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding= DataBindingUtil.setContentView(this,R.layout.activity_edit_alarm);
+
+        setupToolbar();
+
         Intent intent=getIntent();
         binding.repeatCheckbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if(isChecked)
@@ -68,6 +76,24 @@ public class CreateAlarmActivity extends AppCompatActivity {
 
     }
 
+    private void setupToolbar() {
+        toolbar=findViewById(R.id.custom_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(getDrawable(R.drawable.icon_back));
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem settingsMenuItem = menu.findItem(R.id.action_save);
+        SpannableString s = new SpannableString(settingsMenuItem.getTitle());
+        s.setSpan(new ForegroundColorSpan(getColor(R.color.white)), 0, s.length(), 0);
+        settingsMenuItem.setTitle(s);
+        return super.onPrepareOptionsMenu(menu);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.edit_menu,menu);
@@ -92,6 +118,12 @@ public class CreateAlarmActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     private Alarm getAlarm() {
@@ -129,6 +161,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
         binding.thursdayCheckbox.setChecked(alarm.isThursday());
         binding.fridayCheckbox.setChecked(alarm.isFriday());
         createdTime=alarm.getCreateTime();
-        Toast.makeText(this,alarm.getAlarmId()+"",Toast.LENGTH_SHORT).show();
     }
+
 }

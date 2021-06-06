@@ -15,18 +15,30 @@ import android.view.MenuItem;
 import com.example.alarm.CreateAlarm.CreateAlarmActivity;
 import com.example.alarm.R;
 import com.example.alarm.data.Alarm;
+import com.google.android.material.appbar.MaterialToolbar;
 
 public class MainActivity extends AppCompatActivity implements AlarmsListAdapter.onItemClickListener,AlarmsListAdapter.onToggleAlarmListener{
+
     RecyclerView recyclerView;
     AlarmsListAdapter adapter;
     AlarmListViewModel viewModel;
+    private MaterialToolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setupRecycler();
 
+        toolbar =findViewById(R.id.custom_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+
+        setupRecycler();
+        loadAlarms();
+
+    }
+
+    private void loadAlarms() {
         viewModel= ViewModelProviders.of(this).get(AlarmListViewModel.class);
         viewModel.getAlarms().observe(this,alarms -> adapter.setAlarms(alarms));
     }
@@ -56,6 +68,12 @@ public class MainActivity extends AppCompatActivity implements AlarmsListAdapter
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
     }
 
     @Override
