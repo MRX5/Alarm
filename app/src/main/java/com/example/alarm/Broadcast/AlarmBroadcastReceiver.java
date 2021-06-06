@@ -20,21 +20,19 @@ public class AlarmBroadcastReceiver extends BroadcastReceiver {
     public static final String FRIDAY = "FRIDAY";
     public static final String REPEAT = "REPEAT";
     public static final String TITLE = "TITLE";
-    public static final String ALARM_ID="ALARM_ID";
+    public static final String ALARM_ID = "ALARM_ID";
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        if(intent.getAction()!=null &&intent.getAction().equals("CANCEL"))
-        {
-            Intent intent1=new Intent(context,AlarmService.class);
+        if (intent.getAction() != null && intent.getAction().equals(AlarmService.ACTION_CANCEL_ALARM)) {
+            Intent intent1 = new Intent(context, AlarmService.class);
             context.stopService(intent1);
-            int alarmID=intent.getIntExtra(ALARM_ID,0);
-            Intent stopIntent=new Intent(context, StopAlarmService.class);
-            stopIntent.putExtra(AlarmService.ALARM_ID,alarmID);
-            StopAlarmService.enqueueWork(context,stopIntent);
-        }
-        else {
+            int alarmID = intent.getIntExtra(ALARM_ID, 0);
+            Intent stopIntent = new Intent(context, StopAlarmService.class);
+            stopIntent.putExtra(AlarmService.ALARM_ID, alarmID);
+            StopAlarmService.enqueueWork(context, stopIntent);
+        } else {
             Intent intentService = new Intent(context, AlarmService.class);
             intentService.putExtra(AlarmService.TITLE, intent.getStringExtra(TITLE));
             intentService.putExtra(ALARM_ID, intent.getIntExtra(ALARM_ID, 0));

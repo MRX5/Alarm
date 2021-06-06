@@ -16,6 +16,7 @@ public class CreateAlarmViewModel extends AndroidViewModel {
     public CreateAlarmViewModel(@NonNull Application application,int alarmId) {
         super(application);
         repository=new AlarmRepository(application);
+
         if(alarmId!=-1) {
             alarm = repository.getAlarmById(alarmId);
         }
@@ -24,7 +25,9 @@ public class CreateAlarmViewModel extends AndroidViewModel {
     {
         return alarm;
     }
+
     public void updateAlarm(Alarm alarm){repository.updateAlarm(alarm);}
+
     public void createAlarm(Alarm alarm){repository.createAlarm(alarm);}
 
 }

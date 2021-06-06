@@ -17,6 +17,7 @@ import com.example.alarm.Broadcast.AlarmBroadcastReceiver;
 import com.example.alarm.R;
 
 public class AlarmService extends Service {
+    public static final String ACTION_CANCEL_ALARM="CANCEL_ALARM";
     private String CHANNEL_ID="channel_id";
     public static String ALARM_ID="ALARM_ID";
     public static String TITLE="TITLE";
@@ -46,7 +47,7 @@ public class AlarmService extends Service {
         }
 
         Intent intent=new Intent(this, AlarmBroadcastReceiver.class);
-        intent.setAction("CANCEL");
+        intent.setAction(ACTION_CANCEL_ALARM);
         intent.putExtra(ALARM_ID,alarmID);
         PendingIntent cancelPendingIntent=PendingIntent.getBroadcast(this,alarmID,intent,PendingIntent.FLAG_UPDATE_CURRENT);
 
