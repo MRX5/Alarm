@@ -204,9 +204,11 @@ public class Alarm {
         intent.putExtra(AlarmBroadcastReceiver.REPEAT, repeat);
         intent.putExtra(AlarmBroadcastReceiver.TITLE, title);
 
+        int Hour=hour;
+        if(Hour>12)Hour-=12;
+        else if(Hour==0)Hour=12;
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR, hour);
+        calendar.set(Calendar.HOUR, Hour);
         calendar.set(Calendar.MINUTE, minute);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
@@ -214,7 +216,7 @@ public class Alarm {
         if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
         }
-
+        Log.d("aaa", calendar.getTime()+"");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         if (repeat) {

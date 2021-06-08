@@ -21,13 +21,13 @@ public class AlarmRepository {
     private AlarmDatabase db;
     private MutableLiveData<List<Alarm>>alarms=new MutableLiveData<>();
     private MutableLiveData<Alarm>alarm=new MutableLiveData<>();
-    CompositeDisposable disposable=new CompositeDisposable();
 
     public  AlarmRepository(Application application)
     {
         db=AlarmDatabase.getInstance(application);
 
     }
+    @SuppressLint("CheckResult")
     public LiveData<List<Alarm>>getAlarms()
     {
         Flowable<List<Alarm>>flowable=db.alarmDao().getAlarms()
@@ -64,7 +64,7 @@ public class AlarmRepository {
         db.alarmDao().updateAlarm(alarm)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(()-> Log.d("aa", "updateAlarm "),e-> Log.d("aaa",  e.toString()));
+                .subscribe();
     }
     public void updateAlarmState(int id,boolean state)
     {
@@ -94,7 +94,7 @@ public class AlarmRepository {
         db.alarmDao().deleteAlarm(alarm)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(()-> Log.d("aa", "deleteAlarm: "));
+                .subscribe();
     }
 
     @SuppressLint("CheckResult")

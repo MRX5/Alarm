@@ -128,7 +128,6 @@ public class CreateAlarmActivity extends AppCompatActivity {
 
     private Alarm getAlarm() {
         int alarmId = new Random().nextInt(Integer.MAX_VALUE);
-
         Alarm alarm=new Alarm(
                 alarmId,
                 binding.alarmNameEditTxt.getText().toString(),

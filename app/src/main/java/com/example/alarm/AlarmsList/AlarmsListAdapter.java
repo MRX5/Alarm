@@ -39,9 +39,13 @@ public class AlarmsListAdapter extends RecyclerView.Adapter<AlarmsListAdapter.vi
     public void onBindViewHolder(@NonNull viewHolder holder, int position) {
         int hour =alarms.get(position).getHour();
         int minute =alarms.get(position).getMinute();
-        String time=hour+":"+minute;
+        String timeSet;
+        if(hour>12){hour-=12;timeSet="PM";}
+        else if(hour==0){hour=12;timeSet="AM";}
+        else {timeSet="AM";}
+        String time=String.format("%02d:%02d",hour,minute);
         boolean isActive=alarms.get(position).isActive();
-        holder.format.setText(alarms.get(position).isActive()+"");
+        holder.format.setText(timeSet);
         holder.time.setText(time);
         holder.title.setText(alarms.get(position).getTitle());
         holder.ring_status.setText(alarms.get(position).getDays());
@@ -70,6 +74,13 @@ public class AlarmsListAdapter extends RecyclerView.Adapter<AlarmsListAdapter.vi
             switchButton=itemView.findViewById(R.id.list_item_switch);
             format=itemView.findViewById(R.id.list_item_format);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    toggleAlarmListener.onLongClick(alarms.get(getAdapterPosition()));
+                    return true;
+                }
+            });
             switchButton.setOnCheckedChangeListener(this);
         }
 
@@ -95,5 +106,6 @@ public class AlarmsListAdapter extends RecyclerView.Adapter<AlarmsListAdapter.vi
     public interface onToggleAlarmListener
     {
         public void onToggle(Alarm alarm);
+        public void onLongClick(Alarm alarm);
     }
 }

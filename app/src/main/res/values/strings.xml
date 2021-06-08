@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Alarm</string>
     <string name="save">Save</string>
+    <string name="ring_once">Ring once</string>
+    <string name="no_alarms">No alarms</string>
+    <string name="alarm_name">alarm name</string>
 </resources>

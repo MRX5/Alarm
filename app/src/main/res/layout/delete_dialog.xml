@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content">
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/delete_btn"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+        android:layout_width="match_parent"
+        app:icon="@drawable/icon_delete"
+        app:iconTint="#D1343B"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:layout_marginStart="0dp"
+        android:textColor="@color/dialog_text"
+        android:textSize="16sp"
+        android:padding="16dp" />
+
+</com.google.android.material.card.MaterialCardView>
